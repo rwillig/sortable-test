@@ -1,0 +1,35 @@
+(page "index.html"
+  (:require
+    [cljsjs.jquery-ui]))
+
+
+(defelem sortable-table
+  [attr kids]
+  (let [id          (str (gensym))]
+    (with-let [elem   ((ul :class "list-group" :id id attr kids))]
+      (with-init!
+        (let [$e    (js/jQuery (str "#" id))
+              $s    (.sortable $e (clj->js {:placeholder "ui-state-highlight"}))]
+          (.log js/console $s)
+         ;(.disableSelection $e)
+          (.on $s "sortstart" #(.log js/console (.index (.-item %2))))
+         ;(.on $s "sortchange" #(.log js/console %1))
+          (.on $s "sortupdate" #(.log js/console (.index (.-item %2)))))))))
+
+
+(html
+  :lang "en"
+  (head
+    (link :href "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" :rel "stylesheet")
+    (link :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" :rel "stylesheet")
+    (title "sortable test"))
+  (body
+    (sortable-table :css {:margin-top "20px"}
+      (li :class "list-group-item" "Item 1")
+      (li :class "list-group-item" "Item 2")
+      (li :class "list-group-item" "Item 3")
+      (li :class "list-group-item" "Item 4")
+      (li :class "list-group-item" "Item 5")
+      (li :class "list-group-item" "Item 6")
+      (li :class "list-group-item" "Item 7")
+      )))
